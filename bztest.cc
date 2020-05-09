@@ -55,6 +55,16 @@ int main(int argc, char **argv)
     auto cosecant = csc(f);
     std::cout << cosecant.derivative(x) << std::endl;
 
+    // testing substitute
+    std::vector<SubstituteEntry> subs;
+    subs.push_back(SubstituteEntry("f", 1, { }));
+    subs.push_back(SubstituteEntry("g", 2, { }));
+    subs.push_back(SubstituteEntry("f", 3, { { "x", 1 } }));
+    subs.push_back(SubstituteEntry("g", 4, { { "x", 1 } }));
+
+    auto result = (f * csc(g)).derivative(x).substitute(subs);
+    std::cout << result << std::endl;
+
     return 0;
 }
 

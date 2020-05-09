@@ -38,15 +38,38 @@ namespace benzaiten
                 else return fn1.template derivative<Order>(var) + fn2.template derivative<Order>(var);
             }
 
+            FunctionSum<E1, E2> substitute(const std::vector<SubstituteEntry> &subs)
+            {
+                fn1.substitute(subs);
+                fn2.substitute(subs);
+
+                if (fn1.isConcrete() && fn2.isConcrete())
+                {
+                    _isConcrete = true;
+                    _value = fn1.getValue() + fn2.getValue();
+                }
+
+                return *this;
+            }
+
+            bool isConcrete() const { return _isConcrete; }
+
+            double getValue() const { return _value; }
+
             friend std::ostream& operator<<(std::ostream &os, const FunctionSum<E1, E2> &sum)
             {
-                os << "(" << sum.fn1 << " + " << sum.fn2 << ")";
+                if (sum._isConcrete) os << sum._value;
+                else os << "(" << sum.fn1 << " + " << sum.fn2 << ")";
+
                 return os;
             }
 
         private:
-            const E1 fn1;
-            const E2 fn2;
+            E1 fn1;
+            E2 fn2;
+
+            bool _isConcrete = false;
+            double _value;
     };
 
     template <typename E1, typename E2>

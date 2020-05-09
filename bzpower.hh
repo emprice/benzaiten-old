@@ -1,6 +1,8 @@
 #ifndef _BZPOWER_HH_
 #define _BZPOWER_HH_
 
+#include <cmath>
+
 #include "bzvariable.hh"
 #include "bzfunction.hh"
 #include "bzproduct.hh"
@@ -44,6 +46,24 @@ namespace benzaiten
                 }
             }
 
+            FunctionPower<E1, E2> substitute(const std::vector<SubstituteEntry> &subs)
+            {
+                fn1.substitute(subs);
+                fn2.substitute(subs);
+
+                if (fn1.isConcrete() && fn2.isConcrete())
+                {
+                    _isConcrete = true;
+                    _value = pow(fn1.getValue(), fn2.getValue());
+                }
+
+                return *this;
+            }
+
+            bool isConcrete() const { return _isConcrete; }
+
+            double getValue() const { return _value; }
+
             friend std::ostream& operator<<(std::ostream &os, const FunctionPower<E1, E2> &pwr)
             {
                 os << "(" << pwr.fn1 << " ^ " << pwr.fn2 << ")";
@@ -51,8 +71,11 @@ namespace benzaiten
             }
 
         private:
-            const E1 fn1;
-            const E2 fn2;
+            E1 fn1;
+            E2 fn2;
+
+            bool _isConcrete = false;
+            double _value;
     };
 
     template <typename E1, typename E2>

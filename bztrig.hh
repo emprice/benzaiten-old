@@ -5,6 +5,23 @@
 #include "bzfunction.hh"
 #include "bzneg.hh"
 
+#include <cmath>
+
+double sec(double x)
+{
+    return 1. / cos(x);
+}
+
+double csc(double x)
+{
+    return 1. / sin(x);
+}
+
+double cot(double x)
+{
+    return 1. / tan(x);
+}
+
 namespace benzaiten
 {
     template <typename E>
@@ -121,14 +138,36 @@ namespace benzaiten
                 else return (cos(fn) * fn.template derivative<1>(var)).template derivative<Order-1>(var);
             }
 
+            FunctionSine<E> substitute(const std::vector<SubstituteEntry> &subs)
+            {
+                fn.substitute(subs);
+
+                if (fn.isConcrete())
+                {
+                    _isConcrete = true;
+                    _value = sin(fn.getValue());
+                }
+
+                return *this;
+            }
+
+            bool isConcrete() const { return _isConcrete; }
+
+            double getValue() const { return _value; }
+
             friend std::ostream& operator<<(std::ostream &os, const FunctionSine<E> &sine)
             {
-                os << "sin(" << sine.fn << ")";
+                if (sine._isConcrete) os << sine._value;
+                else os << "sin(" << sine.fn << ")";
+
                 return os;
             }
 
         private:
-            const E fn;
+            E fn;
+
+            bool _isConcrete = false;
+            double _value;
     };
 
     template <typename E>
@@ -154,14 +193,36 @@ namespace benzaiten
                 else return (-sin(fn) * fn.template derivative<1>(var)).template derivative<Order-1>(var);
             }
 
+            FunctionCosine<E> substitute(const std::vector<SubstituteEntry> &subs)
+            {
+                fn.substitute(subs);
+
+                if (fn.isConcrete())
+                {
+                    _isConcrete = true;
+                    _value = cos(fn.getValue());
+                }
+
+                return *this;
+            }
+
+            bool isConcrete() const { return _isConcrete; }
+
+            double getValue() const { return _value; }
+
             friend std::ostream& operator<<(std::ostream &os, const FunctionCosine<E> &cosine)
             {
-                os << "cos(" << cosine.fn << ")";
+                if (cosine._isConcrete) os << cosine._value;
+                else os << "cos(" << cosine.fn << ")";
+
                 return os;
             }
 
         private:
-            const E fn;
+            E fn;
+
+            bool _isConcrete = false;
+            double _value;
     };
 
     template <typename E>
@@ -188,14 +249,36 @@ namespace benzaiten
                     fn.template derivative<1>(var)).template derivative<Order-1>(var);
             }
 
+            FunctionTangent<E> substitute(const std::vector<SubstituteEntry> &subs)
+            {
+                fn.substitute(subs);
+
+                if (fn.isConcrete())
+                {
+                    _isConcrete = true;
+                    _value = tan(fn.getValue());
+                }
+
+                return *this;
+            }
+
+            bool isConcrete() const { return _isConcrete; }
+
+            double getValue() const { return _value; }
+
             friend std::ostream& operator<<(std::ostream &os, const FunctionTangent<E> &tngt)
             {
-                os << "tan(" << tngt.fn << ")";
+                if (tngt._isConcrete) os << tngt._value;
+                else os << "tan(" << tngt.fn << ")";
+
                 return os;
             }
 
         private:
-            const E fn;
+            E fn;
+
+            bool _isConcrete = false;
+            double _value;
     };
 
     template <typename E>
@@ -222,14 +305,36 @@ namespace benzaiten
                     fn.template derivative<1>(var)).template derivative<Order-1>(var);
             }
 
+            FunctionCotangent<E> substitute(const std::vector<SubstituteEntry> &subs)
+            {
+                fn.substitute(subs);
+
+                if (fn.isConcrete())
+                {
+                    _isConcrete = true;
+                    _value = cot(fn.getValue());
+                }
+
+                return *this;
+            }
+
+            bool isConcrete() const { return _isConcrete; }
+
+            double getValue() const { return _value; }
+
             friend std::ostream& operator<<(std::ostream &os, const FunctionCotangent<E> &cotan)
             {
-                os << "cot(" << cotan.fn << ")";
+                if (cotan._isConcrete) os << cotan._value;
+                else os << "cot(" << cotan.fn << ")";
+
                 return os;
             }
 
         private:
-            const E fn;
+            E fn;
+
+            bool _isConcrete = false;
+            double _value;
     };
 
     template <typename E>
@@ -256,14 +361,36 @@ namespace benzaiten
                     fn.template derivative<1>(var)).template derivative<Order-1>(var);
             }
 
+            FunctionSecant<E> substitute(const std::vector<SubstituteEntry> &subs)
+            {
+                fn.substitute(subs);
+
+                if (fn.isConcrete())
+                {
+                    _isConcrete = true;
+                    _value = sec(fn.getValue());
+                }
+
+                return *this;
+            }
+
+            bool isConcrete() const { return _isConcrete; }
+
+            double getValue() const { return _value; }
+
             friend std::ostream& operator<<(std::ostream &os, const FunctionSecant<E> &secant)
             {
-                os << "sec(" << secant.fn << ")";
+                if (secant._isConcrete) os << secant._value;
+                else os << "sec(" << secant.fn << ")";
+
                 return os;
             }
 
         private:
-            const E fn;
+            E fn;
+
+            bool _isConcrete = false;
+            double _value;
     };
 
     template <typename E>
@@ -290,14 +417,36 @@ namespace benzaiten
                     fn.template derivative<1>(var)).template derivative<Order-1>(var);
             }
 
+            FunctionCosecant<E> substitute(const std::vector<SubstituteEntry> &subs)
+            {
+                fn.substitute(subs);
+
+                if (fn.isConcrete())
+                {
+                    _isConcrete = true;
+                    _value = csc(fn.getValue());
+                }
+
+                return *this;
+            }
+
+            bool isConcrete() const { return _isConcrete; }
+
+            double getValue() const { return _value; }
+
             friend std::ostream& operator<<(std::ostream &os, const FunctionCosecant<E> &cosecant)
             {
-                os << "csc(" << cosecant.fn << ")";
+                if (cosecant._isConcrete) os << cosecant._value;
+                else os << "csc(" << cosecant.fn << ")";
+
                 return os;
             }
 
         private:
-            const E fn;
+            E fn;
+
+            bool _isConcrete = false;
+            double _value;
     };
 
     template <typename E>

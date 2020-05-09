@@ -41,15 +41,38 @@ namespace benzaiten
                             (fn1 * fn2.template derivative<1>(var)).template derivative<Order-1>(var);
             }
 
+            FunctionProduct<E1, E2> substitute(const std::vector<SubstituteEntry> &subs)
+            {
+                fn1.substitute(subs);
+                fn2.substitute(subs);
+
+                if (fn1.isConcrete() && fn2.isConcrete())
+                {
+                    _isConcrete = true;
+                    _value = fn1.getValue() * fn2.getValue();
+                }
+
+                return *this;
+            }
+
+            bool isConcrete() const { return _isConcrete; }
+
+            double getValue() const { return _value; }
+
             friend std::ostream& operator<<(std::ostream &os, const FunctionProduct<E1, E2> &prod)
             {
-                os << "(" << prod.fn1 << " * " << prod.fn2 << ")";
+                if (prod._isConcrete) os << prod._value;
+                else os << "(" << prod.fn1 << " * " << prod.fn2 << ")";
+
                 return os;
             }
 
         private:
-            const E1 fn1;
-            const E2 fn2;
+            E1 fn1;
+            E2 fn2;
+
+            bool _isConcrete = false;
+            double _value;
     };
 
     template <typename E1, typename E2>

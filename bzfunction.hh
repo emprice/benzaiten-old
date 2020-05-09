@@ -5,27 +5,87 @@
 
 #include <tuple>
 #include <string>
+#include <vector>
 #include <iostream>
+#include <unordered_map>
 
 namespace benzaiten
 {
+    struct SubstituteEntry
+    {
+        SubstituteEntry(const std::string &name, double value,
+            const std::unordered_map<std::string, size_t> &d) :
+                name(name), value(value), d(d)
+        {
+            // no-op
+        }
+
+        ~SubstituteEntry() { }
+
+        std::string name;
+        double value;
+        std::unordered_map<std::string, size_t> d;
+    };
+
     struct FunctionImpl
     {
-        virtual FunctionImpl* create() const = 0;
         virtual FunctionImpl* copy() const = 0;
         virtual bool isFunctionOfVar(const Variable &var) const = 0;
         virtual void print(std::ostream &os) const = 0;
         virtual void incrementDerivative(const Variable &var, size_t order = 1) = 0;
+        virtual bool equals(const SubstituteEntry &subs) const = 0;
+        virtual bool concrete() const = 0;
+        virtual double value() const = 0;
+    };
+
+    template <typename... Args>
+    struct ConcreteFunctionImpl : public FunctionImpl
+    {
+        ConcreteFunctionImpl(double value) : _value(value) { }
+
+        ConcreteFunctionImpl* copy() const
+        {
+            return new ConcreteFunctionImpl<Args...>(_value);
+        }
+
+        bool isFunctionOfVar(const Variable &var) const
+        {
+            // never a function of anything
+            return false;
+        }
+
+        void incrementDerivative(const Variable &var, size_t order = 1)
+        {
+            if (order > 0) _value = 0;
+        }
+
+        void print(std::ostream &os) const
+        {
+            os << _value;
+        }
+
+        bool equals(const SubstituteEntry &subs) const
+        {
+            return false;
+        }
+
+        bool concrete() const
+        {
+            return true;
+        }
+
+        double value() const
+        {
+            return _value;
+        }
+
+        private:
+            double _value;
     };
 
     template <typename... Args>
     struct NullFunctionImpl : public FunctionImpl
     {
-        NullFunctionImpl* create() const
-        {
-            return new NullFunctionImpl<Args...>;
-        }
-
         NullFunctionImpl* copy() const
         {
             return new NullFunctionImpl<Args...>;
@@ -46,16 +106,26 @@ namespace benzaiten
         {
             os << "<null>";
         }
+
+        bool equals(const SubstituteEntry &subs) const
+        {
+            return false;
+        }
+
+        bool concrete() const
+        {
+            return true;
+        }
+
+        double value() const
+        {
+            return 0;
+        }
     };
 
     template <typename... Args>
     struct AbstractFunctionImpl : public FunctionImpl
     {
-        AbstractFunctionImpl* create() const
-        {
-            return new AbstractFunctionImpl<Args...>(name, args);
-        }
-
         AbstractFunctionImpl* copy() const
         {
             return new AbstractFunctionImpl<Args...>(*this);
@@ -104,6 +174,25 @@ namespace benzaiten
             }
         }
 
+        bool equals(const SubstituteEntry &subs) const
+        {
+            return (name == subs.name) && matchDerivativesRecursive(subs.d);
+        }
+
+        bool concrete() const
+        {
+            return false;
+        }
+
+        /**
+         * @attention This operation is not well-defined for an abstract function
+         * but is provided for a complete API.
+         */
+        double value() const
+        {
+            return 0;
+        }
+
         private:
             /// Store the arguments to this function
             std::tuple<Args...> args;
@@ -145,6 +234,30 @@ namespace benzaiten
                 else
                 {
                     incrementDerivativeRecursive<I+1>(var, order);
+                }
+            }
+
+            template <size_t I = 0>
+            bool matchDerivativesRecursive(const std::unordered_map<std::string, size_t> &other) const
+            {
+                if constexpr (I == sizeof...(Args))
+                {
+                    return true;
+                }
+                else
+                {
+                    std::string vname = std::get<I>(args).getName();
+
+                    if (other.count(vname) == 0)
+                    {
+                        return (d[I] == 0) &&
+                            matchDerivativesRecursive<I+1>(other);
+                    }
+                    else
+                    {
+                        return (d[I] == other.at(vname)) &&
+                            matchDerivativesRecursive<I+1>(other);
+                    }
                 }
             }
 
@@ -211,7 +324,7 @@ namespace benzaiten
         template <size_t Order = 1>
         Constant& derivativeInPlace(const Variable &var)
         {
-            value = 0;
+            if constexpr (Order > 0) value = 0;
             return *this;
         }
 
@@ -221,6 +334,15 @@ namespace benzaiten
             if constexpr (Order == 0) return *this;
             else return Constant(*this).derivativeInPlace<Order>(var);
         }
+
+        Constant& substitute(const std::vector<SubstituteEntry> &entries)
+        {
+            return *this;
+        }
+
+        bool isConcrete() const { return true; }
+
+        double getValue() const { return value; }
 
         friend std::ostream&
             operator<<(std::ostream &os, const Constant &cnst)
@@ -287,6 +409,35 @@ namespace benzaiten
         {
             if constexpr (Order == 0) return *this;
             else return Function<Args...>(*this).derivativeInPlace<Order>(var);
+        }
+
+        Function<Args...>& substitute(const std::vector<SubstituteEntry> &entries)
+        {
+            for (auto it = entries.cbegin(); it != entries.cend(); ++it)
+            {
+                if (*this == *it)
+                {
+                    delete impl;
+                    impl = new ConcreteFunctionImpl<Args...>(it->value);
+                }
+            }
+
+            return *this;
+        }
+
+        bool operator==(const SubstituteEntry &entry) const
+        {
+            return impl->equals(entry);
+        }
+
+        bool isConcrete() const
+        {
+            return impl->concrete();
+        }
+
+        double getValue() const
+        {
+            return impl->value();
         }
 
         friend std::ostream&

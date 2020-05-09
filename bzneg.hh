@@ -26,14 +26,36 @@ namespace benzaiten
                 else return -(fn.template derivative<Order>(var));
             }
 
+            FunctionNegate<E> substitute(const std::vector<SubstituteEntry> &subs)
+            {
+                fn.substitute(subs);
+
+                if (fn.isConcrete())
+                {
+                    _isConcrete = true;
+                    _value = -(fn.getValue());
+                }
+
+                return *this;
+            }
+
+            bool isConcrete() const { return _isConcrete; }
+
+            double getValue() const { return _value; }
+
             friend std::ostream& operator<<(std::ostream &os, const FunctionNegate<E> &neg)
             {
-                os << "(-" << neg.fn << ")";
+                if (neg._isConcrete) os << neg._value;
+                else os << "(-" << neg.fn << ")";
+
                 return os;
             }
 
         private:
-            const E fn;
+            E fn;
+
+            bool _isConcrete = false;
+            double _value;
     };
 
     template <typename E>

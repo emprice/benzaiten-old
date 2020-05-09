@@ -1,6 +1,8 @@
 #ifndef _BZLOG_HH_
 #define _BZLOG_HH_
 
+#include <cmath>
+
 #include "bzvariable.hh"
 #include "bzfunction.hh"
 #include "bzquotient.hh"
@@ -35,6 +37,23 @@ namespace benzaiten
                 else return (fn.template derivative<1>(var) / fn).template derivative<Order-1>(var);
             }
 
+            FunctionLog<E> substitute(const std::vector<SubstituteEntry> &subs)
+            {
+                fn.substitute(subs);
+
+                if (fn.isConcrete())
+                {
+                    _isConcrete = true;
+                    _value = log(fn.getValue());
+                }
+
+                return *this;
+            }
+
+            bool isConcrete() const { return _isConcrete; }
+
+            double getValue() const { return _value; }
+
             friend std::ostream& operator<<(std::ostream &os, const FunctionLog<E> &expr)
             {
                 os << "log(" << expr.fn << ")";
@@ -42,7 +61,10 @@ namespace benzaiten
             }
 
         private:
-            const E fn;
+            E fn;
+
+            bool _isConcrete = false;
+            double _value;
     };
 
     template <typename E>
