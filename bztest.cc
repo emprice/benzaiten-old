@@ -16,23 +16,39 @@ int main(int argc, char **argv)
 
     // testing addition
     std::cout << "<<< testing addition >>>" << std::endl;
-    auto sum = f + g;
-    std::cout << sum.derivative(x).derivative(y) << std::endl << std::endl;
+    auto sum1 = f + g;
+    std::cout << sum1.derivative(x).derivative(y) << std::endl;
+    auto sum2 = f + 1;
+    std::cout << sum2.derivative(x).derivative(y) << std::endl;
+    auto sum3 = 1 + f;
+    std::cout << sum3.derivative(x).derivative(y) << std::endl << std::endl;
 
     // testing subtraction
     std::cout << "<<< testing subtraction >>>" << std::endl;
-    auto diff = f - g;
-    std::cout << diff.derivative(x).derivative(y) << std::endl << std::endl;;
+    auto diff1 = f - g;
+    std::cout << diff1.derivative(x).derivative(y) << std::endl;
+    auto diff2 = f - 1;
+    std::cout << diff2.derivative(x).derivative(y) << std::endl;
+    auto diff3 = 1 - f;
+    std::cout << diff3.derivative(x).derivative(y) << std::endl << std::endl;
 
     // testing multiplication
     std::cout << "<<< testing multiplication >>>" << std::endl;
-    auto prod = f * g;
-    std::cout << prod.derivative<2>(x) << std::endl << std::endl;
+    auto prod1 = f * g;
+    std::cout << prod1.derivative<2>(x) << std::endl;
+    auto prod2 = f * 2;
+    std::cout << prod2.derivative<2>(x) << std::endl;
+    auto prod3 = 2 * f;
+    std::cout << prod3.derivative<2>(x) << std::endl << std::endl;
 
     // testing division
     std::cout << "<<< testing division >>>" << std::endl;
-    auto quo = f / g;
-    std::cout << quo.derivative(x) << std::endl << std::endl;
+    auto quo1 = f / g;
+    std::cout << quo1.derivative(x) << std::endl;
+    auto quo2 = f / 3.;
+    std::cout << quo2.derivative(x) << std::endl;
+    auto quo3 = 3. / f;
+    std::cout << quo3.derivative(x) << std::endl << std::endl;
 
     // testing powers
     std::cout << "<<< testing function power >>>" << std::endl;

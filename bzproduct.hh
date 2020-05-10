@@ -87,6 +87,18 @@ namespace benzaiten
         return FunctionProduct<E1, E2>(static_cast<E1 const&>(fn1),
             static_cast<E2 const&>(fn2));
     }
+
+    template <typename E>
+    FunctionProduct<E, Constant> operator*(FunctionExpression<E> const& fn, double other)
+    {
+        return FunctionProduct<E, Constant>(static_cast<E const&>(fn), Constant(other));
+    }
+
+    template <typename E>
+    FunctionProduct<Constant, E> operator*(double other, FunctionExpression<E> const& fn)
+    {
+        return FunctionProduct<Constant, E>(Constant(other), static_cast<E const&>(fn));
+    }
 }
 
 #endif      // _BZPRODUCT_HH_

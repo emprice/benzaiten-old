@@ -84,6 +84,18 @@ namespace benzaiten
         return FunctionSum<E1, E2>(static_cast<E1 const&>(fn1),
             static_cast<E2 const&>(fn2));
     }
+
+    template <typename E>
+    FunctionSum<E, Constant> operator+(FunctionExpression<E> const& fn, double other)
+    {
+        return FunctionSum<E, Constant>(static_cast<E const&>(fn), Constant(other));
+    }
+
+    template <typename E>
+    FunctionSum<Constant, E> operator+(double other, FunctionExpression<E> const& fn)
+    {
+        return FunctionSum<Constant, E>(Constant(other), static_cast<E const&>(fn));
+    }
 }
 
 #endif      // _BZSUM_HH_
