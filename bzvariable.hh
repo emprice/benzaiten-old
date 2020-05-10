@@ -57,6 +57,25 @@ namespace benzaiten
 
         double getValue() const { return _value; }
 
+        Variable& substituteInPlace(const std::vector<SubstituteEntry> &entries)
+        {
+            for (auto it = entries.cbegin(); it != entries.cend(); ++it)
+            {
+                if (it->name == name)
+                {
+                    _isConcrete = true;
+                    _value = it->value;
+                }
+            }
+
+            return *this;
+        }
+
+        Variable substitute(const std::vector<SubstituteEntry> &entries) const
+        {
+            return Variable(*this).substituteInPlace(entries);
+        }
+
         friend std::ostream& operator<<(std::ostream &os, const Variable &vbl)
         {
             if (vbl._isConcrete) os << vbl._value;

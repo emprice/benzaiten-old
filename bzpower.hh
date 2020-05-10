@@ -99,6 +99,12 @@ namespace benzaiten
             static_cast<E2 const&>(fn2));
     }
 
+    template <typename E>
+    FunctionPower<E, Constant> operator^(FunctionExpression<E> const& fn, double pwr)
+    {
+        return FunctionPower<E, Constant>(static_cast<E const&>(fn), Constant(pwr));
+    }
+
     template <typename E1, typename E2>
     FunctionPower<E1, E2> pow(FunctionExpression<E1> const& fn1,
         FunctionExpression<E2> const& fn2)
@@ -108,10 +114,15 @@ namespace benzaiten
     }
 
     template <typename E>
+    FunctionPower<E, Constant> pow(FunctionExpression<E> const& fn, double pwr)
+    {
+        return FunctionPower<E, Constant>(static_cast<E const&>(fn), Constant(pwr));
+    }
+
+    template <typename E>
     FunctionPower<E, Constant> sqrt(FunctionExpression<E> const& fn)
     {
-        return FunctionPower<E, Constant>(static_cast<E const&>(fn),
-            static_cast<Constant const&>(0.5));
+        return FunctionPower<E, Constant>(static_cast<E const&>(fn), Constant(0.5));
     }
 }
 

@@ -43,6 +43,14 @@ int main(int argc, char **argv)
     auto rt = sqrt(f);
     std::cout << rt.derivative<2>(x) << std::endl << std::endl;
 
+    // testing log and exp
+    std::cout << "<<< testing log and exp >>>" << std::endl;
+    auto lg = log(f);
+    std::cout << lg.derivative(x) << std::endl;
+
+    auto ex = exp(f);
+    std::cout << ex.derivative(x) << std::endl << std::endl;
+
     // testing trigonometry
     std::cout << "<<< testing trig >>>" << std::endl;
 
@@ -100,12 +108,16 @@ int main(int argc, char **argv)
     subs.push_back(SubstituteEntry("g", 2, { }));
     subs.push_back(SubstituteEntry("f", 3, { { "x", 1 } }));
     subs.push_back(SubstituteEntry("g", 4, { { "x", 1 } }));
+    subs.push_back(SubstituteEntry("x", 5, { }));
 
     auto test1 = (f * csc(g)).derivative(x);
     std::cout << test1 << " = " << test1.substitute(subs) << std::endl;
 
     auto test2 = (f / csch(g)).derivative(x);
-    std::cout << test2 << " = " << test2.substitute(subs) << std::endl << std::endl;
+    std::cout << test2 << " = " << test2.substitute(subs) << std::endl;
+
+    auto test3 = (f * (x ^ 2)).derivative(x);
+    std::cout << test3 << " = " << test3.substitute(subs) << std::endl << std::endl;
 
     return 0;
 }

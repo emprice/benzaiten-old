@@ -6,28 +6,10 @@
 
 #include <tuple>
 #include <string>
-#include <vector>
 #include <iostream>
-#include <unordered_map>
 
 namespace benzaiten
 {
-    struct SubstituteEntry
-    {
-        SubstituteEntry(const std::string &name, double value,
-            const std::unordered_map<std::string, size_t> &d) :
-                name(name), value(value), d(d)
-        {
-            // no-op
-        }
-
-        ~SubstituteEntry() { }
-
-        std::string name;
-        double value;
-        std::unordered_map<std::string, size_t> d;
-    };
-
     struct FunctionImpl
     {
         virtual FunctionImpl* copy() const = 0;
@@ -331,9 +313,14 @@ namespace benzaiten
             else return Constant(*this).derivativeInPlace<Order>(var);
         }
 
-        Constant& substitute(const std::vector<SubstituteEntry> &entries)
+        Constant& substituteInPlace(const std::vector<SubstituteEntry> &entries)
         {
             return *this;
+        }
+
+        Constant substitute(const std::vector<SubstituteEntry> &entries) const
+        {
+            return Constant(*this).substituteInPlace(entries);
         }
 
         bool isConcrete() const { return true; }

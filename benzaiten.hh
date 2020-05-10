@@ -10,6 +10,7 @@
 #include "bzneg.hh"
 #include "bzpower.hh"
 #include "bzlog.hh"
+#include "bzexp.hh"
 #include "bztrig.hh"
 #include "bzhyperbolic.hh"
 
