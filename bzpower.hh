@@ -32,6 +32,12 @@ namespace benzaiten
     struct FunctionPower : public FunctionExpression<FunctionPower<E1, E2>>
     {
         public:
+            template <size_t Order = 1>
+            using deriv_type = typename ProductDerivativeType<FunctionPower<E1, FunctionDifference<E2, Constant>>,
+                FunctionSum<FunctionProduct<E2, typename E1::template deriv_type<1>>,
+                    FunctionProduct<FunctionProduct<E1, typename E2::template deriv_type<1>>,
+                FunctionLog<E1>>>, Order - 1>::type;
+
             FunctionPower(const E1 &fn1, const E2 &fn2) : fn1(fn1), fn2(fn2) { }
 
             template <size_t Order = 1>
@@ -66,7 +72,9 @@ namespace benzaiten
 
             friend std::ostream& operator<<(std::ostream &os, const FunctionPower<E1, E2> &pwr)
             {
-                os << "(" << pwr.fn1 << " ^ " << pwr.fn2 << ")";
+                if (pwr._isConcrete) os << pwr._value;
+                else os << "(" << pwr.fn1 << " ^ " << pwr.fn2 << ")";
+
                 return os;
             }
 

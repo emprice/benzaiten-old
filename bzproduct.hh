@@ -31,7 +31,7 @@ namespace benzaiten
             template <size_t Order = 1>
             using deriv_type = typename ProductDerivativeType<E1, E2, Order>::type;
 
-            FunctionProduct(const E1 &fn1, const E2 &fn2) : fn1(fn1), fn2(fn2) { }
+            FunctionProduct(const E1 &_fn1, const E2 &_fn2) : fn1(_fn1), fn2(_fn2) { }
 
             template <size_t Order = 1>
             typename ProductDerivativeType<E1, E2, Order>::type derivative(const Variable &var) const

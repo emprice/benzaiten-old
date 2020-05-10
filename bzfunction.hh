@@ -1,6 +1,7 @@
 #ifndef _BZFUNCTION_HH_
 #define _BZFUNCTION_HH_
 
+#include "bzexpression.hh"
 #include "bzvariable.hh"
 
 #include <tuple>
@@ -307,11 +308,6 @@ namespace benzaiten
                     printArguments<I+1>(os);
                 }
             }
-    };
-
-    template <typename E>
-    struct FunctionExpression
-    {
     };
 
     struct Constant : public FunctionExpression<Constant>

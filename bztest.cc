@@ -55,6 +55,10 @@ int main(int argc, char **argv)
     auto cosecant = csc(f);
     std::cout << cosecant.derivative(x) << std::endl;
 
+    // testing variable expressions
+    auto expr = (f * (x ^ Constant(2)));
+    std::cout << (x ^ Constant(2)).derivative(x) << std::endl;
+
     // testing substitute
     std::vector<SubstituteEntry> subs;
     subs.push_back(SubstituteEntry("f", 1, { }));
