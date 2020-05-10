@@ -11,6 +11,7 @@
 #include "bzpower.hh"
 #include "bzlog.hh"
 #include "bztrig.hh"
+#include "bzhyperbolic.hh"
 
 #endif      // _BENZAITEN_HH_
 

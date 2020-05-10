@@ -64,6 +64,27 @@ int main(int argc, char **argv)
     auto cosecant = csc(f);
     std::cout << cosecant.derivative(x) << std::endl << std::endl;;
 
+    // testing hyperbolic trigonometry
+    std::cout << "<<< testing hyperbolic trig >>>" << std::endl;
+
+    auto sinh_ = sinh(f);
+    std::cout << sinh_.derivative<2>(x) << std::endl;
+
+    auto cosh_ = cosh(f);
+    std::cout << cosh_.derivative<2>(x) << std::endl;
+
+    auto tanh_ = tanh(f);
+    std::cout << tanh_.derivative(x) << std::endl;
+
+    auto coth_ = coth(f);
+    std::cout << coth_.derivative(x) << std::endl;
+
+    auto sech_ = sech(f);
+    std::cout << sech_.derivative(x) << std::endl;
+
+    auto csch_ = csch(f);
+    std::cout << csch_.derivative(x) << std::endl << std::endl;
+
     // testing variable expressions
     std::cout << "<<< testing variable expressions >>>" << std::endl;
     auto expr = (f * (x ^ Constant(2)));
@@ -80,8 +101,11 @@ int main(int argc, char **argv)
     subs.push_back(SubstituteEntry("f", 3, { { "x", 1 } }));
     subs.push_back(SubstituteEntry("g", 4, { { "x", 1 } }));
 
-    auto result = (f * csc(g)).derivative(x).substitute(subs);
-    std::cout << result << std::endl << std::endl;
+    auto test1 = (f * csc(g)).derivative(x);
+    std::cout << test1 << " = " << test1.substitute(subs) << std::endl;
+
+    auto test2 = (f / csch(g)).derivative(x);
+    std::cout << test2 << " = " << test2.substitute(subs) << std::endl << std::endl;
 
     return 0;
 }
