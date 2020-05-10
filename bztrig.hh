@@ -138,9 +138,9 @@ namespace benzaiten
                 else return (cos(fn) * fn.template derivative<1>(var)).template derivative<Order-1>(var);
             }
 
-            FunctionSine<E> substitute(const std::vector<SubstituteEntry> &subs)
+            FunctionSine<E>& substituteInPlace(const std::vector<SubstituteEntry> &subs)
             {
-                fn.substitute(subs);
+                fn.substituteInPlace(subs);
 
                 if (fn.isConcrete())
                 {
@@ -149,6 +149,11 @@ namespace benzaiten
                 }
 
                 return *this;
+            }
+
+            FunctionSine<E> substitute(const std::vector<SubstituteEntry> &subs) const
+            {
+                return FunctionSine<E>(*this).substituteInPlace(subs);
             }
 
             bool isConcrete() const { return _isConcrete; }
@@ -193,9 +198,9 @@ namespace benzaiten
                 else return (-sin(fn) * fn.template derivative<1>(var)).template derivative<Order-1>(var);
             }
 
-            FunctionCosine<E> substitute(const std::vector<SubstituteEntry> &subs)
+            FunctionCosine<E>& substituteInPlace(const std::vector<SubstituteEntry> &subs)
             {
-                fn.substitute(subs);
+                fn.substituteInPlace(subs);
 
                 if (fn.isConcrete())
                 {
@@ -204,6 +209,11 @@ namespace benzaiten
                 }
 
                 return *this;
+            }
+
+            FunctionCosine<E> substitute(const std::vector<SubstituteEntry> &subs) const
+            {
+                return FunctionCosine<E>(*this).substituteInPlace(subs);
             }
 
             bool isConcrete() const { return _isConcrete; }
@@ -249,9 +259,9 @@ namespace benzaiten
                     fn.template derivative<1>(var)).template derivative<Order-1>(var);
             }
 
-            FunctionTangent<E> substitute(const std::vector<SubstituteEntry> &subs)
+            FunctionTangent<E>& substituteInPlace(const std::vector<SubstituteEntry> &subs)
             {
-                fn.substitute(subs);
+                fn.substituteInPlace(subs);
 
                 if (fn.isConcrete())
                 {
@@ -260,6 +270,11 @@ namespace benzaiten
                 }
 
                 return *this;
+            }
+
+            FunctionTangent<E> substitute(const std::vector<SubstituteEntry> &subs) const
+            {
+                return FunctionTangent<E>(*this).substituteInPlace(subs);
             }
 
             bool isConcrete() const { return _isConcrete; }
@@ -305,9 +320,9 @@ namespace benzaiten
                     fn.template derivative<1>(var)).template derivative<Order-1>(var);
             }
 
-            FunctionCotangent<E> substitute(const std::vector<SubstituteEntry> &subs)
+            FunctionCotangent<E>& substituteInPlace(const std::vector<SubstituteEntry> &subs)
             {
-                fn.substitute(subs);
+                fn.substituteInPlace(subs);
 
                 if (fn.isConcrete())
                 {
@@ -316,6 +331,11 @@ namespace benzaiten
                 }
 
                 return *this;
+            }
+
+            FunctionCotangent<E> substitute(const std::vector<SubstituteEntry> &subs) const
+            {
+                return FunctionCotangent<E>(*this).substituteInPlace(subs);
             }
 
             bool isConcrete() const { return _isConcrete; }
@@ -361,9 +381,9 @@ namespace benzaiten
                     fn.template derivative<1>(var)).template derivative<Order-1>(var);
             }
 
-            FunctionSecant<E> substitute(const std::vector<SubstituteEntry> &subs)
+            FunctionSecant<E>& substituteInPlace(const std::vector<SubstituteEntry> &subs)
             {
-                fn.substitute(subs);
+                fn.substituteInPlace(subs);
 
                 if (fn.isConcrete())
                 {
@@ -372,6 +392,11 @@ namespace benzaiten
                 }
 
                 return *this;
+            }
+
+            FunctionSecant<E> substitute(const std::vector<SubstituteEntry> &subs) const
+            {
+                return FunctionSecant<E>(*this).substituteInPlace(subs);
             }
 
             bool isConcrete() const { return _isConcrete; }
@@ -417,9 +442,9 @@ namespace benzaiten
                     fn.template derivative<1>(var)).template derivative<Order-1>(var);
             }
 
-            FunctionCosecant<E> substitute(const std::vector<SubstituteEntry> &subs)
+            FunctionCosecant<E>& substituteInPlace(const std::vector<SubstituteEntry> &subs)
             {
-                fn.substitute(subs);
+                fn.substituteInPlace(subs);
 
                 if (fn.isConcrete())
                 {
@@ -428,6 +453,11 @@ namespace benzaiten
                 }
 
                 return *this;
+            }
+
+            FunctionCosecant<E> substitute(const std::vector<SubstituteEntry> &subs) const
+            {
+                return FunctionCosecant<E>(*this).substituteInPlace(subs);
             }
 
             bool isConcrete() const { return _isConcrete; }

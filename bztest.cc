@@ -1,11 +1,4 @@
-#include "bzvariable.hh"
-#include "bzfunction.hh"
-#include "bzsum.hh"
-#include "bzdifference.hh"
-#include "bzproduct.hh"
-#include "bzpower.hh"
-#include "bzlog.hh"
-#include "bztrig.hh"
+#include "benzaiten.hh"
 
 using namespace benzaiten;
 
@@ -14,29 +7,45 @@ int main(int argc, char **argv)
     Variable t("t", Temporal), x("x", Spatial), y("y", Spatial);
     Function f("f", t, x, y);
     Function g("g", x, t);
-    Function h("h", x, t, y);
+    Function h("h", t);
 
     // testing derivative and printing
+    std::cout << "<<< testing multi derivative >>>" << std::endl;
     auto df = f.derivative(x).derivative<2>(y);
-    std::cout << df << std::endl;
+    std::cout << df << std::endl << std::endl;
 
     // testing addition
+    std::cout << "<<< testing addition >>>" << std::endl;
     auto sum = f + g;
-    std::cout << sum.derivative(x).derivative(y) << std::endl;
+    std::cout << sum.derivative(x).derivative(y) << std::endl << std::endl;
 
     // testing subtraction
+    std::cout << "<<< testing subtraction >>>" << std::endl;
     auto diff = f - g;
-    std::cout << diff.derivative(x).derivative(y) << std::endl;
+    std::cout << diff.derivative(x).derivative(y) << std::endl << std::endl;;
 
     // testing multiplication
+    std::cout << "<<< testing multiplication >>>" << std::endl;
     auto prod = f * g;
-    std::cout << prod.derivative<2>(x) << std::endl;
+    std::cout << prod.derivative<2>(x) << std::endl << std::endl;
 
     // testing division
+    std::cout << "<<< testing division >>>" << std::endl;
     auto quo = f / g;
-    std::cout << quo.derivative(x) << std::endl;
+    std::cout << quo.derivative(x) << std::endl << std::endl;
+
+    // testing powers
+    std::cout << "<<< testing function power >>>" << std::endl;
+    auto pwr = f ^ g;
+    std::cout << pwr.derivative(x) << std::endl << std::endl;
+
+    std::cout << "<<< testing square root >>>" << std::endl;
+    auto rt = sqrt(f);
+    std::cout << rt.derivative<2>(x) << std::endl << std::endl;
 
     // testing trigonometry
+    std::cout << "<<< testing trig >>>" << std::endl;
+
     auto sine = sin(f);
     std::cout << sine.derivative<2>(x) << std::endl;
 
@@ -53,13 +62,18 @@ int main(int argc, char **argv)
     std::cout << secant.derivative(x) << std::endl;
 
     auto cosecant = csc(f);
-    std::cout << cosecant.derivative(x) << std::endl;
+    std::cout << cosecant.derivative(x) << std::endl << std::endl;;
 
     // testing variable expressions
+    std::cout << "<<< testing variable expressions >>>" << std::endl;
     auto expr = (f * (x ^ Constant(2)));
-    std::cout << (x ^ Constant(2)).derivative(x) << std::endl;
+    std::cout << expr.derivative(x) << std::endl;
+
+    auto expr2 = h * log(x);
+    std::cout << expr2.derivative(x) << std::endl << std::endl;
 
     // testing substitute
+    std::cout << "<<< testing substitution >>>" << std::endl;
     std::vector<SubstituteEntry> subs;
     subs.push_back(SubstituteEntry("f", 1, { }));
     subs.push_back(SubstituteEntry("g", 2, { }));
@@ -67,7 +81,7 @@ int main(int argc, char **argv)
     subs.push_back(SubstituteEntry("g", 4, { { "x", 1 } }));
 
     auto result = (f * csc(g)).derivative(x).substitute(subs);
-    std::cout << result << std::endl;
+    std::cout << result << std::endl << std::endl;
 
     return 0;
 }

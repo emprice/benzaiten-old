@@ -33,7 +33,7 @@ namespace benzaiten
         template <size_t Order = 1>
         Variable& derivativeInPlace(const Variable &other)
         {
-            if (name == other.name)
+            if ((Order == 1) && (name == other.name))
             {
                 _isConcrete = true;
                 _value = 1;

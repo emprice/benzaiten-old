@@ -407,7 +407,7 @@ namespace benzaiten
             else return Function<Args...>(*this).derivativeInPlace<Order>(var);
         }
 
-        Function<Args...>& substitute(const std::vector<SubstituteEntry> &entries)
+        Function<Args...>& substituteInPlace(const std::vector<SubstituteEntry> &entries)
         {
             for (auto it = entries.cbegin(); it != entries.cend(); ++it)
             {
@@ -419,6 +419,11 @@ namespace benzaiten
             }
 
             return *this;
+        }
+
+        Function<Args...> substitute(const std::vector<SubstituteEntry> &entries) const
+        {
+            return Function<Args...>(*this).substituteInPlace(entries);
         }
 
         bool operator==(const SubstituteEntry &entry) const

@@ -52,10 +52,10 @@ namespace benzaiten
                 }
             }
 
-            FunctionPower<E1, E2> substitute(const std::vector<SubstituteEntry> &subs)
+            FunctionPower<E1, E2>& substituteInPlace(const std::vector<SubstituteEntry> &subs)
             {
-                fn1.substitute(subs);
-                fn2.substitute(subs);
+                fn1.substituteInPlace(subs);
+                fn2.substituteInPlace(subs);
 
                 if (fn1.isConcrete() && fn2.isConcrete())
                 {
@@ -64,6 +64,11 @@ namespace benzaiten
                 }
 
                 return *this;
+            }
+
+            FunctionPower<E1, E2> substitute(const std::vector<SubstituteEntry> &subs) const
+            {
+                return FunctionPower<E1, E2>(*this).substituteInPlace(subs);
             }
 
             bool isConcrete() const { return _isConcrete; }
@@ -100,6 +105,13 @@ namespace benzaiten
     {
         return FunctionPower<E1, E2>(static_cast<E1 const&>(fn1),
             static_cast<E2 const&>(fn2));
+    }
+
+    template <typename E>
+    FunctionPower<E, Constant> sqrt(FunctionExpression<E> const& fn)
+    {
+        return FunctionPower<E, Constant>(static_cast<E const&>(fn),
+            static_cast<Constant const&>(0.5));
     }
 }
 

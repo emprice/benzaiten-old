@@ -38,10 +38,10 @@ namespace benzaiten
                 else return fn1.template derivative<Order>(var) + fn2.template derivative<Order>(var);
             }
 
-            FunctionSum<E1, E2> substitute(const std::vector<SubstituteEntry> &subs)
+            FunctionSum<E1, E2>& substituteInPlace(const std::vector<SubstituteEntry> &subs)
             {
-                fn1.substitute(subs);
-                fn2.substitute(subs);
+                fn1.substituteInPlace(subs);
+                fn2.substituteInPlace(subs);
 
                 if (fn1.isConcrete() && fn2.isConcrete())
                 {
@@ -50,6 +50,11 @@ namespace benzaiten
                 }
 
                 return *this;
+            }
+
+            FunctionSum<E1, E2> substitute(const std::vector<SubstituteEntry> &subs) const
+            {
+                return FunctionSum<E1, E2>(*this).substituteInPlace(subs);
             }
 
             bool isConcrete() const { return _isConcrete; }

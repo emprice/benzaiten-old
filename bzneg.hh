@@ -26,9 +26,9 @@ namespace benzaiten
                 else return -(fn.template derivative<Order>(var));
             }
 
-            FunctionNegate<E> substitute(const std::vector<SubstituteEntry> &subs)
+            FunctionNegate<E>& substituteInPlace(const std::vector<SubstituteEntry> &subs)
             {
-                fn.substitute(subs);
+                fn.substituteInPlace(subs);
 
                 if (fn.isConcrete())
                 {
@@ -37,6 +37,11 @@ namespace benzaiten
                 }
 
                 return *this;
+            }
+
+            FunctionNegate<E> substitute(const std::vector<SubstituteEntry> &subs) const
+            {
+                return FunctionNegate<E>(*this).substitute(subs);
             }
 
             bool isConcrete() const { return _isConcrete; }

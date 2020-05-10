@@ -15,7 +15,7 @@ namespace benzaiten
     template <typename F, size_t Order>
     struct LogDerivativeType
     {
-        using type = QuotientDerivativeType<F, typename F::template deriv_type<1>, Order - 1>;
+        using type = typename QuotientDerivativeType<F, typename F::template deriv_type<1>, Order - 1>::type;
     };
 
     template <typename F>
@@ -28,6 +28,9 @@ namespace benzaiten
     struct FunctionLog : public FunctionExpression<FunctionLog<E>>
     {
         public:
+            template <size_t Order = 1>
+            using deriv_type = typename QuotientDerivativeType<E, typename E::template deriv_type<1>, Order - 1>::type;
+
             FunctionLog(const E &fn) : fn(fn) { }
 
             template <size_t Order = 1>
@@ -37,9 +40,9 @@ namespace benzaiten
                 else return (fn.template derivative<1>(var) / fn).template derivative<Order-1>(var);
             }
 
-            FunctionLog<E> substitute(const std::vector<SubstituteEntry> &subs)
+            FunctionLog<E>& substituteInPlace(const std::vector<SubstituteEntry> &subs)
             {
-                fn.substitute(subs);
+                fn.substituteInPlace(subs);
 
                 if (fn.isConcrete())
                 {
@@ -48,6 +51,11 @@ namespace benzaiten
                 }
 
                 return *this;
+            }
+
+            FunctionLog<E> substitute(const std::vector<SubstituteEntry> &subs) const
+            {
+                return FunctionLog<E>(*this).substituteInPlace(subs);
             }
 
             bool isConcrete() const { return _isConcrete; }
