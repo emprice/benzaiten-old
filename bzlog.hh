@@ -15,7 +15,7 @@ namespace benzaiten
     template <typename F, size_t Order>
     struct LogDerivativeType
     {
-        using type = typename QuotientDerivativeType<F, typename F::template deriv_type<1>, Order - 1>::type;
+        using type = typename QuotientDerivativeType<typename F::template deriv_type<1>, F, Order - 1>::type;
     };
 
     template <typename F>
@@ -29,7 +29,7 @@ namespace benzaiten
     {
         public:
             template <size_t Order = 1>
-            using deriv_type = typename QuotientDerivativeType<E, typename E::template deriv_type<1>, Order - 1>::type;
+            using deriv_type = typename QuotientDerivativeType<typename E::template deriv_type<1>, E, Order - 1>::type;
 
             FunctionLog(const E &fn) : fn(fn) { }
 
