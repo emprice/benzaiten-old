@@ -111,11 +111,17 @@ int main(int argc, char **argv)
 
     // testing variable expressions
     std::cout << "<<< testing variable expressions >>>" << std::endl;
-    auto expr = (f * (x ^ Constant(2)));
+    auto expr = (f * (x ^ 2));
     std::cout << expr.derivative(x) << std::endl;
 
     auto expr2 = h * log(x);
-    std::cout << expr2.derivative(x) << std::endl << std::endl;
+    std::cout << expr2.derivative(x) << std::endl;
+
+    auto expr3 = (3. / sqrt(1. / (x ^ 3))) * f * sqrt(x);
+    std::cout << expr3.derivative(x) << std::endl;
+
+    auto expr4 = x * (t ^ 2);
+    std::cout << expr4.derivative(x).derivative(x) << std::endl << std::endl;
 
     // testing substitute
     std::cout << "<<< testing substitution >>>" << std::endl;
@@ -125,6 +131,7 @@ int main(int argc, char **argv)
     subs.push_back(SubstituteEntry("f", 3, { { "x", 1 } }));
     subs.push_back(SubstituteEntry("g", 4, { { "x", 1 } }));
     subs.push_back(SubstituteEntry("x", 5, { }));
+    subs.push_back(SubstituteEntry("t", 6, { }));
 
     auto test1 = (f * csc(g)).derivative(x);
     std::cout << test1 << " = " << test1.substitute(subs) << std::endl;
@@ -133,7 +140,13 @@ int main(int argc, char **argv)
     std::cout << test2 << " = " << test2.substitute(subs) << std::endl;
 
     auto test3 = (f * (x ^ 2)).derivative(x);
-    std::cout << test3 << " = " << test3.substitute(subs) << std::endl << std::endl;
+    std::cout << test3 << " = " << test3.substitute(subs) << std::endl;
+
+    auto test4 = ((3. / sqrt(1. / (x ^ 3))) * f * sqrt(x)).derivative(x);
+    std::cout << test4 << " = " << test4.substitute(subs) << std::endl;
+
+    auto test5 = (x * (x * (t ^ 2)).derivative(x)).derivative(x);
+    std::cout << test5 << " = " << test5.substitute(subs) << std::endl << std::endl;
 
     return 0;
 }

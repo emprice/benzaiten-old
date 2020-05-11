@@ -402,6 +402,7 @@ namespace benzaiten
                 {
                     delete impl;
                     impl = new ConcreteFunctionImpl<Args...>(it->value);
+                    break;
                 }
             }
 

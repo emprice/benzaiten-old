@@ -33,10 +33,18 @@ namespace benzaiten
         template <size_t Order = 1>
         Variable& derivativeInPlace(const Variable &other)
         {
-            if ((Order == 1) && (name == other.name))
+            if ((name == other.name) && (!_isConcrete))
             {
-                _isConcrete = true;
-                _value = 1;
+                if (Order == 1)
+                {
+                    _isConcrete = true;
+                    _value = 1;
+                }
+                else if (Order > 1)
+                {
+                    _isConcrete = true;
+                    _value = 0;
+                }
             }
             else
             {
@@ -61,10 +69,11 @@ namespace benzaiten
         {
             for (auto it = entries.cbegin(); it != entries.cend(); ++it)
             {
-                if (it->name == name)
+                if ((it->name == name) && (!_isConcrete))
                 {
                     _isConcrete = true;
                     _value = it->value;
+                    break;
                 }
             }
 
