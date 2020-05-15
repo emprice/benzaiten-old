@@ -8,6 +8,15 @@
 
 double coth(double x)
 {
+    if (x > log(DBL_MAX))
+    {
+        return 1.;
+    }
+    else if (x < -log(DBL_MAX))
+    {
+        return -1.;
+    }
+
     return cosh(x) / sinh(x);
 }
 

@@ -11,7 +11,8 @@ namespace benzaiten
     enum VariableType
     {
         Spatial,
-        Temporal
+        Temporal,
+        Other
     };
 
     struct Variable : public FunctionExpression<Variable>

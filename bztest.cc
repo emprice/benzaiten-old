@@ -148,6 +148,9 @@ int main(int argc, char **argv)
     auto test5 = (x * (x * (t ^ 2)).derivative(x)).derivative(x);
     std::cout << test5 << " = " << test5.substitute(subs) << std::endl << std::endl;
 
+    auto test6 = (1. / x) * (x * f).derivative(x);
+    std::cout << test6 << " = " << test6.substitute(subs) << std::endl << std::endl;
+
     return 0;
 }
 

@@ -3,8 +3,8 @@
 
 #include "bzvariable.hh"
 #include "bzfunction.hh"
-#include "bzsum.hh"
 #include "bzneg.hh"
+#include "bzproduct.hh"
 
 namespace benzaiten
 {
@@ -45,7 +45,7 @@ namespace benzaiten
     template <typename F2, size_t Order>
     struct Simple2QuotientDerivativeType
     {
-        using type = typename SimpleProductDerivativeType<FunctionQuotient<FunctionNegate<typename F2::template deriv_type<1>>, FunctionProduct<F2, F2>>, Order - 1>::type;
+        using type = FunctionProductSimple<typename QuotientDerivativeType<FunctionNegate<typename F2::template deriv_type<1>>, FunctionProduct<F2, F2>, Order - 1>::type>;
     };
 
     template <typename F2>
